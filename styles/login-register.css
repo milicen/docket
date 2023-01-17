@@ -1,0 +1,23 @@
+@import url(variables.css);
+
+.page#login, .page#register {
+  /* display: grid; */
+  place-items: center;
+}
+
+.card.credentials {
+  padding: 3rem 4rem;
+  width: min(60ch, 100%);
+}
+
+.credentials__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.card.credentials h1 {
+  font-size: 2rem;
+  font-weight: bold;
+}

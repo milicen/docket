@@ -1,0 +1,91 @@
+@import url(variables.css);
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 16px;
+  font-family: 'Mulish', sans-serif;
+  color: var(--clr-black);
+}
+
+body {
+  background-color: var(--clr-background);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+a {
+  color: var(--clr-accent);
+  text-decoration: none;
+}
+
+a:hover {
+  cursor: pointer;
+}
+
+main {
+  flex: 1;
+  display: flex;
+}
+
+.page {
+  padding: 2rem;
+  width: 100vw;
+  display: none;
+}
+
+.card {
+  background-color: var(--clr-white);
+  border-radius: .2rem;
+  box-shadow: var(--drop-shadow);
+}
+
+input {
+  color: var(--clr-black);
+  font-size: 1rem;
+  padding: .5em;
+  border: 2px solid var(--clr-light-grey);
+  border-radius: .2rem;
+}
+
+input:focus-visible {
+  outline-color: var(--clr-primary);
+}
+
+.input-labeled {
+  display: grid;
+  position: relative;
+  margin-bottom: 1.8rem;
+}
+
+.input-labeled label {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 1em;
+  color: var(--clr-dark-grey);
+}
+
+.input-labeled input {
+  padding: 1em;
+}
+
+.btn {
+  background-color: var(--clr-primary);
+  border-radius: .2rem;
+  color: var(--clr-white);
+  padding: .5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  border: none;
+  width: 100%;
+}
+
+.btn-big {
+  margin-top: 1.5rem;
+  font-size: 1.5rem;
+  padding: 1rem;
+}

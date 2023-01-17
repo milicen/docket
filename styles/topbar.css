@@ -1,0 +1,27 @@
+@import url(variables.css);
+
+.top-bar {
+  background-color: var(--clr-white);
+  display: flex;
+  justify-content: space-between;
+}
+
+.top-bar img {
+  padding: 1rem 1rem;
+}
+
+.top-bar__links {
+  height: 100%;
+  display: flex;
+  text-align: center;
+}
+
+.top-bar__links > * {
+  min-width: 25ch;
+  border-left: 1px solid var(--clr-light-grey);
+  padding-block: 1rem;
+}
+
+.username {
+  color: var(--clr-dark-grey);
+}

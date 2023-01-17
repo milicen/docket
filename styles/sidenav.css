@@ -1,0 +1,21 @@
+@import url(variables.css);
+
+.side-nav {
+  background-color: var(--clr-primary);
+  width: min-content;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.side-nav > a {
+  padding: 1rem;
+}
+
+.side-nav path {
+  fill: var(--clr-secondary);
+}
+
+.side-nav > a.active path {
+  fill: var(--clr-white);
+}

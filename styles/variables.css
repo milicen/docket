@@ -1,0 +1,13 @@
+:root {
+  --clr-primary: #666D3B;
+  --clr-secondary: #C6CF8D;
+  --clr-accent: #BF5508;
+  --clr-background: #F4F6FA;
+  --clr-white: #FFFFFF;
+  --clr-light-grey: #E9E9E9;
+  --clr-grey: #C3C3C3;
+  --clr-dark-grey: #909090; 
+  --clr-black: #363636;
+
+  --drop-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1);
+}
