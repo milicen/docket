@@ -1,0 +1,107 @@
+@import url(variables.css);
+
+.page#list {
+  gap: 1.5rem; 
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.panel header {
+  text-align: center;
+  padding: 1rem;
+  border-bottom: 2px solid var(--clr-light-grey);
+}
+
+.panel header.with-arrow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.panel header > h2 {
+  color: var(--clr-dark-grey);
+}
+
+.panel header > svg path {
+  fill: var(--clr-dark-grey);
+}
+
+.panel .panel-content {
+  flex: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+ 
+.panel ul {
+  list-style: none;
+  flex: 1;
+}
+
+.panel .panel-content form {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+/* --- todo --- */
+
+.todo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-block: .5rem;
+}
+
+.todo {
+  border-bottom: 2px solid var(--clr-light-grey);
+}
+
+.todo input:not([type="checkbox"]) {
+  flex: 1;
+  border: none;
+}
+
+.todo input:not([type="checkbox"]):focus-visible {
+  outline: none;
+}
+
+.todo input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* --todo-tag -- */
+.todo.todo-tag {
+  display: block;
+}
+
+.todo-tag div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.todo-tag div:first-child input[type="text"] {
+  flex: 1;
+}
+
+/* --- tags --- */
+.tags {
+  display: flex;
+  gap: .3rem;
+}
+
+.tag {
+  font-size: .8rem;
+  background-color: var(--clr-secondary);
+  padding: .5em 1em;
+  border-radius: 100vmax;
+  color: var(--clr-white);
+  font-weight: bold;
+  letter-spacing: .05em;
+}

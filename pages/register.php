@@ -1,6 +1,3 @@
-<link rel="stylesheet" href="../styles/login.css">
-
-
 <section class="page" id="register">
   <form class="card credentials">
     <div class="credentials__head">

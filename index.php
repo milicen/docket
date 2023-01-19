@@ -6,9 +6,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles/main.css">
-  <link rel="stylesheet" href="../styles/topbar.css">
-  <link rel="stylesheet" href="../styles/sidenav.css">
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/sidenav.css">
+  <link rel="stylesheet" href="styles/login-register.css">
+  <link rel="stylesheet" href="styles/list.css">
+
+
   
   <title>Calendar</title>
 </head>
@@ -33,6 +37,11 @@ else {
       display: grid;
     }';
   }
+  else if ($page == "list") {
+    echo '.page#' . $page . ' {
+      display: flex;
+    }';
+  }
   else {
     echo '.page#'.$page.' {
       display: block;
@@ -44,7 +53,7 @@ else {
 
 <body>
   <div class="top-bar">
-    <img src="../assets/docket.svg" alt="docket">
+    <img src="assets/docket.svg" alt="docket">
     <div class="top-bar__links">
       <span class="username">handa geniu</span>
       <a onclick="location.href = location.origin + location.pathname + '?page=login'">Logout</a>
@@ -67,15 +76,12 @@ else {
       </a>
     </nav>  
 
-    <section class="page" id="calendar">
-      <h1>Calendar</h1>
-    </section>
-
     <?php
-    include('./register.php');
-    include('./login.php');
-    include('./list_todo.php');
-    include('./goals.php');
+    include('pages/calendar.php');
+    include('pages/register.php');
+    include('pages/login.php');
+    include('pages/list_todo.php');
+    include('pages/goals.php');
     ?>
     
   </main>
