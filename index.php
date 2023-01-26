@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="styles/sidenav.css">
   <link rel="stylesheet" href="styles/login-register.css">
   <link rel="stylesheet" href="styles/list.css">
+  <link rel="stylesheet" href="styles/goals.css">
 
 
   

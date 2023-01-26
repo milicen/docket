@@ -1,0 +1,77 @@
+.page#goals .grid{
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+}
+
+.page#goals button {
+  border: 2px dashed var(--clr-secondary);
+  border-radius: .2rem;
+  color: var(--clr-primary);
+  font-weight: bold;
+  background-color: transparent;
+}
+
+.page#goals button:hover {
+  cursor: pointer;
+}
+
+.card.goal:hover {
+  cursor: pointer;
+}
+
+.card.goal {
+  width: 100%;
+}
+
+.card.goal section {
+  padding: 1rem;
+}
+
+.card.goal span {
+  margin-bottom: .5rem;
+}
+
+.card.goal section:first-child {
+  border-bottom: 1px solid var(--clr-light-grey);
+}
+
+.card.goal section span:last-of-type {
+  float: right;
+}
+
+.card.goal .goal-title {
+  clear: both;
+  font-size: 1.8rem;
+  line-height: 1em;
+  margin-bottom: .3em;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+          line-clamp: 2; 
+  -webkit-box-orient: vertical;
+}
+
+.card.goal .counter {
+  color: var(--clr-secondary);
+}
+
+.card.goal :is(.dates, .description) {
+  color: var(--clr-dark-grey);
+}
+
+.card.goal .dates {
+  font-style: italic;
+}
+
+.card.goal .description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 5; /* number of lines to show */
+          line-clamp: 5; 
+  -webkit-box-orient: vertical;
+}
+

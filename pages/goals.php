@@ -1,3 +1,10 @@
 <section class="page" id="goals">
-  <h1>Goals</h1>
+  <div class="grid">
+    <button>+ New Goal</button>
+    <?php
+    include('comps/goal-card.php');
+    include('comps/goal-card.php');
+    include('comps/goal-card.php');
+    ?>
+  </div>
 </section>
