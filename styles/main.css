@@ -42,7 +42,7 @@ main {
   box-shadow: var(--drop-shadow);
 }
 
-input {
+input, textarea {
   color: var(--clr-black);
   font-size: 1rem;
   padding: .5em;
@@ -50,7 +50,7 @@ input {
   border-radius: .2rem;
 }
 
-input:focus-visible {
+:is(input, textarea):focus-visible {
   outline-color: var(--clr-primary);
 }
 

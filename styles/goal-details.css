@@ -1,0 +1,97 @@
+@import url(variables.css);
+
+.page#goal-details {
+  margin-inline: 10rem;
+}
+
+.page#goal-details > *:not(.line) {
+  flex: 1;
+  padding-inline: 1rem;
+}
+
+.line {
+  width: 2px;
+  height: 100%;
+  background-color: var(--clr-light-grey);
+  margin-inline: 5rem;
+}
+
+.page#goal-details .details {
+  padding-inline: 1rem;
+}
+
+.page#goal-details .details .title {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.page#goal-details .details h1 {
+  font-size: 2rem;
+}
+
+.page#goal-details .details a {
+  position: absolute;
+  top: 50%;
+  left: -3rem;
+  transform: translateY(-50%);
+}
+
+.page#goal-details .details a path {
+  fill: var(--clr-dark-grey);
+}
+
+.page#goal-details .details .input-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.page#goal-details .details .input-group label {
+  min-width: 5rem;
+}
+
+.page#goal-details .details input{
+  flex: 1;
+}
+
+.page#goal-details .details textarea {
+  width: 100%;
+  min-height: 20ch;
+  resize: vertical;
+}
+
+.page#goal-details .todos {
+  height: 100%;
+  overflow-y: hidden;
+  position: relative;
+}
+
+.page#goal-details .todos h2 {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.page#goal-details .todos h3 {
+  font-size: 1rem;
+  margin-bottom: 1em;
+  color: var(--clr-dark-grey);
+}
+
+.page#goal-details .todo-container {
+  margin-inline: -1rem;
+  padding-inline: 1rem;
+  max-height: 41.5rem;
+  overflow-y: auto;
+}
+
+.page#goal-details form.add-todo {
+  background-color: var(--clr-background);
+  position: absolute;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  margin-inline: 1rem;
+  padding-block: 1rem;
+}

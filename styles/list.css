@@ -42,7 +42,7 @@
   flex: 1;
 }
 
-.panel .panel-content form {
+form.add-todo {
   display: flex;
   flex-direction: column;
   gap: .5rem;
@@ -88,6 +88,45 @@
 
 .todo-tag div:first-child input[type="text"] {
   flex: 1;
+}
+
+/* -- todo-pick-calendar -- */
+.todo.todo-pick-calendar {
+  display: block;
+  background-color: var(--clr-white);
+  padding-inline: .5rem;
+  border-bottom: none;
+  border-radius: .3rem;
+  margin-bottom: .5rem;
+}
+
+.todo.todo-pick-calendar div:first-child {
+  display: flex;
+  align-items: start;
+  gap: 1rem;
+}
+
+.todo.todo-pick-calendar input[type="checkbox"] {
+  margin-top: .6rem;
+  margin-left: .5rem;
+}
+
+.todo.todo-pick-calendar input[type="date"] {
+  flex: none;
+  border: 1px solid var(--clr-white);
+  width: 2.5rem;
+  color: transparent;
+}
+
+input[type="date"]:focus {
+  background: transparent;
+}
+
+.todo-pick-calendar span {
+  display: block;
+  margin-left: 2.5rem;
+  font-style: italic;
+  color: var(--clr-dark-grey);
 }
 
 /* --- tags --- */

@@ -21,7 +21,7 @@
     </ul>
 
 
-    <form>
+    <form class="add-todo">
       <input type="text" placeholder="Type your to-do">
       <input class="btn" type="submit" value="Add todo">
     </form>

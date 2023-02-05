@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="styles/login-register.css">
   <link rel="stylesheet" href="styles/list.css">
   <link rel="stylesheet" href="styles/goals.css">
+  <link rel="stylesheet" href="styles/goal-details.css">
 
 
   
@@ -38,7 +39,7 @@ else {
       display: grid;
     }';
   }
-  else if ($page == "list") {
+  else if ($page == "list" || $page == "goal-details") {
     echo '.page#' . $page . ' {
       display: flex;
     }';
@@ -83,6 +84,7 @@ else {
     include('pages/login.php');
     include('pages/list_todo.php');
     include('pages/goals.php');
+    include('pages/goal_details.php');
     ?>
     
   </main>

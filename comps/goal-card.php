@@ -1,4 +1,4 @@
-<div class="card goal">
+<div class="card goal" onclick="location.href = location.origin + location.pathname + '?page=goal-details'">
   <section>
     <span class="tag">tag</span>
     <span class="counter">0/12</span>
