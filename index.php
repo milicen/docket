@@ -13,9 +13,12 @@
   <link rel="stylesheet" href="styles/list.css">
   <link rel="stylesheet" href="styles/goals.css">
   <link rel="stylesheet" href="styles/goal-details.css">
+  <link rel="stylesheet" href="styles/calendar.css">
 
 
-  
+  <script src="dayjs/dayjs.min.js"></script>
+  <script src="dayjs/plugin/weekday.js"></script>
+  <script src="dayjs/plugin/weekOfYear.js"></script>
   <title>Calendar</title>
 </head>
 
@@ -39,7 +42,7 @@ else {
       display: grid;
     }';
   }
-  else if ($page == "list" || $page == "goal-details") {
+  else if ($page == "list" || $page == "goal-details" || $page == "calendar") {
     echo '.page#' . $page . ' {
       display: flex;
     }';

@@ -1,0 +1,131 @@
+@import url(variables.css);
+
+.page#calendar {
+  gap: 1rem;
+  height: 100%;
+  border: 1px solid black;
+}
+
+.calendar-holder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-header {
+  position: relative;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  background-color: var(--clr-white);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.calendar-header :is(svg, span):hover {
+  cursor: pointer;
+}
+
+.calendar-header span {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--clr-primary);
+}
+
+.calendar-header path {
+  fill: var(--clr-dark-grey);
+}
+
+.month-head {
+  color: var(--clr-dark-grey);
+  width: 20ch;
+  text-align: center;
+}
+
+.calendar-grid {
+  background-color: var(--clr-white);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-grid > * {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  list-style: none;
+  /* border: 1px solid black; */
+}
+
+.calendar-grid > * > * {
+  padding: 1rem;
+  text-align: center;
+}
+
+.days-of-week {
+  padding-block: 1.2rem;
+} 
+
+.days-of-week > * {
+  color: var(--clr-dark-grey);
+}
+
+.calendar-days {
+  flex: 1;
+}
+
+.calendar-days > * {
+  position: relative;
+}
+
+.calendar-day:hover {
+  cursor: pointer;
+}
+
+.calendar-day > span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.calendar-day--today > span {
+  color: var(--clr-white);
+  font-weight: bold;
+}
+
+.calendar-day--today::before {
+  content: '';
+  position: absolute;
+  width: 3rem;
+  aspect-ratio: 1;
+  background-color: var(--clr-primary);
+  border-radius: 100vmax;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.calendar-day--not-current > span {
+  color: var(--clr-grey);
+}
+
+.calendar-day--selected > span {
+  color: var(--clr-primary);
+}
+
+.calendar-day--selected::before {
+  content: '';
+  position: absolute;
+  width: 3rem;
+  aspect-ratio: 1;
+  background-color: var(--clr-secondary);
+  border-radius: 100vmax;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+
