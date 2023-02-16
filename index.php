@@ -19,7 +19,17 @@
   <script src="dayjs/dayjs.min.js"></script>
   <script src="dayjs/plugin/weekday.js"></script>
   <script src="dayjs/plugin/weekOfYear.js"></script>
-  <title>Calendar</title>
+
+  <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+
+  <script>
+    function getData(form) {
+      var formData = new FormData(form);
+      return Object.fromEntries(formData)
+    }
+  </script>
+
+  <title>Dokcet</title>
 </head>
 
 <?php
