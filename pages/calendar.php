@@ -16,9 +16,37 @@
       <ol id="calendar-days" class="calendar-days"></ol>
     </div>
   </section>
-  <?php
-  include('comps/todo-panel.php');
-  ?>
+
+  <section class="card panel">
+
+    <header class="with-arrow">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M18.41 7.41L17 6l-6 6l6 6l1.41-1.41L13.83 12l4.58-4.59m-6 0L11 6l-6 6l6 6l1.41-1.41L7.83 12l4.58-4.59Z"/></svg>
+      <h2 class="date" id="calendar_todo_date">12 January 2023</h2>
+    </header>
+
+    <div class="panel-content">
+      <ul id="calendar_todo_list" class="todo-list">
+        <li class="todo">
+          <input type="checkbox">
+          <input type="text" placeholder="To-do">
+        </li>
+        <li class="todo todo-tag">
+          <div>
+            <input type="checkbox">
+            <input type="text" placeholder="To-do">
+          </div>
+          <div class="tags">
+            <span class="tag">chores</span>
+          </div>
+        </li>
+      </ul>
+
+      <form class="add-todo" onsubmit="addTodo(event)">
+        <input id="add_todo" type="text" name="todo" placeholder="Type your to-do">
+        <input class="btn" type="submit" value="Add todo">
+      </form>
+    </div>
+  </section>
 </section>
 
 <script>
@@ -74,10 +102,6 @@ function createCalendar(year = INITIAL_YEAR, month = INITIAL_MONTH) {
     appendDay(day, calendarDaysElement);
   });
 
-  console.log(currentMonthDays)
-  console.log(TODAY);
-  console.log(currentMonthDays.find(day => day.date == TODAY));
-
   if (currentMonthDays.find(day => day.date == TODAY) === undefined) {
     document.getElementById('present-month-selector').style.display = 'block'
   }
@@ -99,8 +123,16 @@ function appendDay(day, calendarDaysElement) {
     }
       // overwrite selected day value
     selectedDay = dayElement
-    // add class to selected day
-    selectedDay.classList.add('calendar-day--selected')
+
+    let todayDayOfMonth = TODAY.split('-')[2]
+    let selectedDayOfMonth = selectedDay.children[0].innerText
+
+    if (selectedDayOfMonth !== todayDayOfMonth) {
+      // add class to selected day
+      selectedDay.classList.add('calendar-day--selected')
+    }
+
+    getTodos()
   })
 
   const dayOfMonthElement = document.createElement("span");
@@ -206,6 +238,8 @@ function initMonthSelectors() {
     .addEventListener("click", function () {
       selectedMonth = dayjs(new Date(INITIAL_YEAR, INITIAL_MONTH - 1, 1));
       createCalendar(selectedMonth.format("YYYY"), selectedMonth.format("M"));
+      selectedDay = document.querySelector('.calendar-day--today')
+      getTodos()
     });
 
   document
@@ -216,4 +250,150 @@ function initMonthSelectors() {
     });
 }
 
+</script>
+
+<script>
+const todoList = document.querySelector('#calendar_todo_list')
+const calendarTodoDate = document.querySelector('#calendar_todo_date')
+
+window.addEventListener('load', e => {
+  selectedDay = document.querySelector('.calendar-day--today')
+  console.log(selectedDay)
+  getTodos()
+})
+
+
+function getTodos() {
+  let dayOfMonth = parseInt(selectedDay.children[0].innerText)
+  let date = currentMonthDays.find(day => day.dayOfMonth === dayOfMonth).date
+  let user = JSON.parse(localStorage.getItem('user'))[0]
+  $.ajax({
+    type: 'GET',
+    url: 'api/get_todos_by_date.php',
+    data: {
+      date: date,
+      user_id: user.user_id
+    },
+    success: (data) => {
+      let res = JSON.parse(data)
+      // alert(res.message)
+      console.log(res.data)
+      if (res.success > 0) {
+        let todos = res.data
+        calendarTodoDate.innerText = date
+        todoList.innerHTML = ''
+        if (todos.length > 0) {
+          todos.forEach(todo => {
+            todoList.innerHTML += `
+              <li class="todo" data-todo="${todo.todo_id}">
+                <input type="checkbox" ${todo.is_finished ? 'checked' : ''} onchange="updateTodo(event,${todo.todo_id})">
+                <input type="text" placeholder="To-do" value="${todo.todo}" oninput="updateTodo(event,${todo.todo_id})">
+              </li>
+            `
+            
+          })
+        }
+      }
+    },
+    error: (xhr, status, error) => {
+      console.log(xhr)
+      console.log(status)
+      console.log(error)
+    }
+  })
+}
+
+function addTodo(event) {
+  event.preventDefault()
+  let target = getData(event.target)
+  console.log(target)
+  let dayOfMonth = parseInt(selectedDay.children[0].innerText)
+  let date = currentMonthDays.find(day => day.dayOfMonth === dayOfMonth).date
+  let user = JSON.parse(localStorage.getItem('user'))[0]
+  $.ajax({
+    type: 'POST',
+    url: 'api/add_todo.php',
+    data: {
+      date: date,
+      user_id: user.user_id,
+      todo: target.todo
+    },
+    success: (data) => {
+      let res = JSON.parse(data)
+      // alert(res.message)
+      console.log(res.data)
+      if (res.success > 0) {
+        todoList.innerHTML += `
+          <li class="todo" data-todo="${res.data[0].todo_id}">
+            <input type="checkbox" onchange="updateTodo(event,${res.data[0].todo_id})">
+            <input type="text" placeholder="To-do" value="${target.todo}" oninput="updateTodo(event,${res.data[0].todo_id})">
+          </li>
+        `
+        document.querySelector('#add_todo').value = null
+      }
+    },
+    error: (xhr, status, error) => {
+      console.log(xhr)
+      console.log(status)
+      console.log(error)
+    }
+  })
+}
+
+function updateTodo(event, todoId) {
+  let todosEl = Array.from(document.querySelectorAll('.todo'))
+  let changedTodo = todosEl.find(todo => parseInt(todo.dataset.todo) === todoId)
+  let isChecked = changedTodo.children[0].checked
+  let todoVal = changedTodo.children[1].value
+  let user = JSON.parse(localStorage.getItem('user'))[0]
+  
+  if(todoVal == '') {
+    deleteTodo(changedTodo, user, todoId)
+    return
+  }
+
+  $.ajax({
+    type: 'POST',
+    url: 'api/update_todo.php',
+    data: {
+      todo_id: todoId,
+      user_id: user.user_id,
+      todo: todoVal,
+      todo_finished: isChecked ? 1 : 0
+    },
+    success: (data) => {
+      let res = JSON.parse(data)
+      console.log(res.data)
+    },
+    error: (xhr, status, error) => {
+      console.log(xhr)
+      console.log(status)
+      console.log(error)
+    }
+  })
+}
+
+function deleteTodo(changedTodo, user, todoId) {
+  $.ajax({
+    type: 'POST',
+    url: 'api/delete_todo.php',
+    data: {
+      todo_id: todoId,
+      user_id: user.user_id
+    },
+    success: (data) => {
+      let res = JSON.parse(data)
+      console.log(res.data)
+      alert(res.message)
+
+      changedTodo.remove()
+    },
+    error: (xhr, status, error) => {
+      console.log(xhr)
+      console.log(status)
+      console.log(error)
+    }
+  })
+
+}
 </script>

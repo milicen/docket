@@ -32,7 +32,7 @@ function login(event) {
       let res = JSON.parse(data)
       alert(res.message)
       if (res.success > 0) {
-        localStorage.setItem('user', res.user)
+        localStorage.setItem('user', JSON.stringify(res.user))
         location.href = location.origin + location.pathname + '?page=calendar'
       }
     },

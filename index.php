@@ -70,8 +70,8 @@ else {
   <div class="top-bar">
     <img src="assets/docket.svg" alt="docket">
     <div class="top-bar__links">
-      <span class="username">handa geniu</span>
-      <a onclick="location.href = location.origin + location.pathname + '?page=login'">Logout</a>
+      <span class="username"></span>
+      <a onclick="logout()">Logout</a>
     </div>
   </div>
 
@@ -101,8 +101,26 @@ else {
     ?>
     
   </main>
-  
-
-
 </body>
+
+<script>
+if (!localStorage.getItem('user')) {
+  document.querySelector('.top-bar__links .username').innerText = 'Not logged in'
+  
+  if (!location.search.includes('login')) {
+    location.replace(location.href = location.origin + location.pathname + '?page=login')
+  }
+}
+else {
+  let user = JSON.parse(localStorage.getItem('user'))[0]
+  document.querySelector('.top-bar__links .username').innerText = user.user_name
+}
+
+function logout() {
+  localStorage.removeItem('user')
+  location.href = location.origin + location.pathname + '?page=login'
+}
+
+</script>
+
 </html>
