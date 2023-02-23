@@ -2,11 +2,14 @@
 
 .page#list {
   gap: 1.5rem; 
+  overflow-x: auto;
+  border: 1px solid black;
 }
 
 .panel {
   display: flex;
   flex-direction: column;
+  min-width: 30rem;
 }
 
 .panel header {
@@ -61,12 +64,15 @@ form.add-todo {
   border-bottom: 2px solid var(--clr-light-grey);
 }
 
-.todo input:not([type="checkbox"]) {
+.todo .todo-input {
   flex: 1;
   border: none;
+  color: var(--clr-black);
+  font-size: 1rem;
+  padding: .5em;
 }
 
-.todo input:not([type="checkbox"]):focus-visible {
+.todo .todo-input:focus-visible {
   outline: none;
 }
 

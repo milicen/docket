@@ -3,8 +3,8 @@ date_default_timezone_set("Asia/Jakarta");
 include('../class/class.global.php');
 include('../class/handshake.php');
 
-$todo = $_POST['todo'];
 $todo_id = $_POST['todo_id'];
+$todo = $_POST['todo'];
 $todo_finished = $_POST['todo_finished'];
 $user_id = $_POST['user_id'];
 

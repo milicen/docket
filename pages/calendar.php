@@ -287,7 +287,7 @@ function getTodos() {
             todoList.innerHTML += `
               <li class="todo" data-todo="${todo.todo_id}">
                 <input type="checkbox" ${todo.is_finished ? 'checked' : ''} onchange="updateTodo(event,${todo.todo_id})">
-                <input type="text" placeholder="To-do" value="${todo.todo}" oninput="updateTodo(event,${todo.todo_id})">
+                <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${todo.todo_id})">${todo.todo}</div>
               </li>
             `
             
@@ -326,7 +326,7 @@ function addTodo(event) {
         todoList.innerHTML += `
           <li class="todo" data-todo="${res.data[0].todo_id}">
             <input type="checkbox" onchange="updateTodo(event,${res.data[0].todo_id})">
-            <input type="text" placeholder="To-do" value="${target.todo}" oninput="updateTodo(event,${res.data[0].todo_id})">
+            <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${res.data[0].todo_id})">${target.todo}</div>
           </li>
         `
         document.querySelector('#add_todo').value = null
@@ -344,7 +344,7 @@ function updateTodo(event, todoId) {
   let todosEl = Array.from(document.querySelectorAll('.todo'))
   let changedTodo = todosEl.find(todo => parseInt(todo.dataset.todo) === todoId)
   let isChecked = changedTodo.children[0].checked
-  let todoVal = changedTodo.children[1].value
+  let todoVal = event.target.innerText
   let user = JSON.parse(localStorage.getItem('user'))[0]
   
   if(todoVal == '') {

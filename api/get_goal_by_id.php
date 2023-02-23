@@ -3,27 +3,33 @@ date_default_timezone_set("Asia/Jakarta");
 include('../class/class.global.php');
 include('../class/handshake.php');
 
+$goal_id = $_GET['goal_id'];
 $user_id = $_GET['user_id'];
 
+// get goal
 $db = new db();
-$db->q('SELECT DISTINCT date FROM todos WHERE user = :user_id ORDER BY date ASC');
+$db->q('SELECT * FROM goals WHERE goal_id = :goal_id AND user = :user_id');
+$db->b(':goal_id', $goal_id);
 $db->b(':user_id', $user_id);
-$dates = $db->m();
+$goal = $db->s();
 $db->rc();
 
+// get goal todos
 $db = new db();
-$db->q('SELECT * FROM todos WHERE user = :user_id ORDER BY date ASC');
+$db->q('SELECT * FROM todos WHERE goal = :goal_id AND user = :user_id');
+$db->b(':goal_id', $goal_id);
 $db->b(':user_id', $user_id);
 $todos = $db->m();
 $db->rc();
 
 echo json_encode([
   "success" => 1,
-  "message" => "Fetched".$user_id."'s todos.",
+  "message" => "Added new todo",
   "data" => array(
-    "dates" => $dates,
+    "goal" => $goal,
     "todos" => $todos
   )
-])
+]);
+
 
 ?>

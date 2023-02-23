@@ -29,6 +29,10 @@
   font-size: 2rem;
 }
 
+.page#goal-details .details h1:focus-visible {
+  outline: none;
+}
+
 .page#goal-details .details a {
   position: absolute;
   top: 50%;
