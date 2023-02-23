@@ -384,7 +384,7 @@ function deleteTodo(changedTodo, user, todoId) {
     success: (data) => {
       let res = JSON.parse(data)
       console.log(res.data)
-      alert(res.message)
+      // alert(res.message)
 
       changedTodo.remove()
     },
@@ -394,6 +394,5 @@ function deleteTodo(changedTodo, user, todoId) {
       console.log(error)
     }
   })
-
 }
 </script>

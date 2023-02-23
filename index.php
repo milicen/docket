@@ -92,12 +92,24 @@ else {
     </nav>  
 
     <?php
-    include('pages/calendar.php');
-    include('pages/register.php');
-    include('pages/login.php');
-    include('pages/list_todo.php');
-    include('pages/goals.php');
-    include('pages/goal_details.php');
+    if ($page == "calendar") {
+      include('pages/calendar.php');
+    }
+    else if ($page == "register") {
+      include('pages/register.php');
+    }
+    else if ($page == "login") {
+      include('pages/login.php');
+    }
+    else if ($page == "list") {
+      include('pages/list_todo.php');
+    }
+    else if ($page == "goals") {
+      include('pages/goals.php');
+    }
+    else if ($page == "goal-details") {
+      include('pages/goal_details.php');
+    }
     ?>
     
   </main>
