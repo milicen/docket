@@ -74,11 +74,11 @@ function getGoal() {
           todoList.innerHTML += `
             <li class="todo todo-pick-calendar" data-todo="${todo.todo_id}">
               <div>
-                <input type="checkbox" onchange="updateTodo(event,${todo.todo_id})">
-                <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${todo.todo_id})">${todo.todo}</div>
-                <input type="date" onchange="updateTodo(event,${todo.todo_id})">
+                <input type="checkbox" onchange="updateTodo(event,${todo.todo_id},'todo_finished')" ${todo.is_finished ? 'checked' : ''}>
+                <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${todo.todo_id},'todo')">${todo.todo}</div>
+                <input type="date" onchange="updateTodo(event,${todo.todo_id},'date')" value="${todo.date}">
               </div>
-              <span>${todo.date}</span>
+              <span class="date" data-todo="${todo.todo_id}">${todo.date}</span>
             </li>
           `
         });
@@ -166,11 +166,11 @@ function addTodo(event) {
         todoList.innerHTML += `
           <li class="todo todo-pick-calendar" data-todo="${res.data[0].todo_id}">
               <div>
-                <input type="checkbox" onchange="updateTodo(event,${res.data[0].todo_id})">
-                <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${res.data[0].todo_id})">${target.todo}</div>
-                <input type="date" onchange="updateTodo(event,${res.data[0].todo_id})">
+                <input type="checkbox" onchange="updateTodo(event,${res.data[0].todo_id},'todo_finished')">
+                <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${res.data[0].todo_id},'todo')">${target.todo}</div>
+                <input type="date" onchange="updateTodo(event,${res.data[0].todo_id},'date')">
               </div>
-              <span>${date}</span>
+              <span class="date" data-todo="${res.data[0].todo_id}">${date}</span>
             </li>
         `
         document.querySelector('#add_todo').value = null
@@ -184,4 +184,80 @@ function addTodo(event) {
   })
 }
 
+
+function updateTodo(event, todoId, part) {
+  let todo, todo_finished, date
+  let updateData = {
+    user_id: user.user_id,
+    todo_id: todoId
+  }
+
+  switch(part) {
+    case 'todo':
+      todo = event.target.innerText
+      updateData.todo = todo
+
+      if (todo == '') {
+        console.log('empty')
+        let todos = Array.from(document.querySelectorAll('.todo'))
+        let changedTodo = todos.find(todo => parseInt(todo.dataset.todo) === todoId)
+        deleteTodo(changedTodo, todoId)
+        return
+      }
+
+      break
+    case 'date':
+      date = event.target.value
+      updateData.date = date
+      break
+    case 'todo_finished':
+      todo_finished = event.target.checked
+      updateData.todo_finished = todo_finished ? 1 : 0
+      break
+  }
+
+  $.ajax({
+    type: 'POST',
+    url: 'api/update_todo.php',
+    data: updateData,
+    success: (data) => {
+      let res = JSON.parse(data)
+      console.log(res.data)
+      
+      if (date) {
+        let dates = Array.from(document.querySelectorAll('.date'))
+        let dateToUpdate = dates.find(date => parseInt(date.dataset.todo) === todoId)
+        dateToUpdate.innerText = date
+      }
+    },
+    error: (xhr, status, error) => {
+      console.log(xhr)
+      console.log(status)
+      console.log(error)
+    }
+  })
+}
+
+function deleteTodo(changedTodo, todoId) {
+  $.ajax({
+    type: 'POST',
+    url: 'api/delete_todo.php',
+    data: {
+      todo_id: todoId,
+      user_id: user.user_id
+    },
+    success: (data) => {
+      let res = JSON.parse(data)
+      console.log(res.data)
+      // alert(res.message)
+
+      changedTodo.remove()
+    },
+    error: (xhr, status, error) => {
+      console.log(xhr)
+      console.log(status)
+      console.log(error)
+    }
+  })
+}
 </script>

@@ -30,16 +30,29 @@
   padding: 1rem;
 }
 
-.card.goal span {
-  margin-bottom: .5rem;
-}
-
 .card.goal section:first-child {
   border-bottom: 1px solid var(--clr-light-grey);
 }
 
-.card.goal section span:last-of-type {
-  float: right;
+.card.goal section .goal-misc {
+  width: 100%;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.card.goal section .goal-misc .gap {
+  flex: 1;
+}
+
+.card.goal section .goal-misc svg {
+  height: 1.8rem;
+}
+
+.card.goal section .goal-misc svg path{
+  /* height: 1.8rem; */
+  fill: var(--clr-dark-grey);
 }
 
 .card.goal .goal-title {
@@ -77,3 +90,42 @@
   -webkit-box-orient: vertical;
 }
 
+dialog {
+  margin: auto;
+  padding: 1.2rem;
+  border-radius: .3rem;
+  width: 30rem;
+  border: 5px solid var(--black);
+  text-align: center;
+}
+
+dialog h1 {
+  font-size: 1.2rem;
+  margin-bottom: 1em;
+}
+
+dialog p {
+  margin-bottom: 1em;
+}
+
+dialog .buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+dialog button {
+  flex: 1;
+  background-color: transparent;
+  padding: .5em;
+  border: none;
+}
+
+dialog button.danger {
+  border: 2px solid var(--clr-accent);
+  border-radius: .3rem;
+  color: var(--clr-accent);
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.216);
+}
