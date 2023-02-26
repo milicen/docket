@@ -10,6 +10,7 @@
   display: flex;
   flex-direction: column;
   min-width: 30rem;
+  position: relative;
 }
 
 .panel header {
@@ -44,6 +45,18 @@
 .panel ul {
   list-style: none;
   flex: 1;
+}
+
+.del-list {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: .5rem;
+  /* width: 1.4rem; */
+}
+
+.del-list path {
+  fill: var(--clr-dark-grey);
 }
 
 form.add-todo {

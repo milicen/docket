@@ -2,9 +2,30 @@
 
 </section>
 
+<dialog id="delete-popup">
+  <form method="dialog">
+    <h1 id="delete-popup__title">Delete Confirmation</h1>
+    <p>Are you sure you'd like to delete this goal and all todos associated with it?</p>
+    <div class="buttons">
+      <button value="cancel">Cancel</button>
+      <button class="danger" value="accept">Yes, I want to delete</button>
+    </div>
+  </form>
+
+</dialog>
+
 <script>
 const user = JSON.parse(localStorage.getItem('user'))[0]
 const page = document.querySelector('#list')
+const deletePopup = document.querySelector('#delete-popup')
+
+let dateToDelete
+
+deletePopup.addEventListener('close', (e) => {
+  if (deletePopup.returnValue === 'accept') {
+    deleteAllTodosOn(dateToDelete)
+  }
+})
 
 window.addEventListener('load', (e) => {
   getAllTodos()
@@ -42,6 +63,8 @@ function getAllTodos() {
           console.log(date)
           let cardPanel = `
           <section class="card panel" data-date="${date.date}">
+            <svg class="del-list" onclick="deleteConfirm(event,'${date.date}')" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 16H5V5h14v14M17 8.4L13.4 12l3.6 3.6l-1.4 1.4l-3.6-3.6L8.4 17L7 15.6l3.6-3.6L7 8.4L8.4 7l3.6 3.6L15.6 7L17 8.4Z"/></svg>
+
             <header>
               <h2 class="date">${date.date}</h2>
             </header>
@@ -206,6 +229,43 @@ function deleteTodo(changedTodo, todoId) {
       console.log(error)
     }
   })
+}
+
+function deleteAllTodosOn(date) {
+  // console.log(date)
+  // return;
+  $.ajax({
+    type: 'POST',
+    url: 'api/delete_todos_by_date.php',
+    data: {
+      user_id: user.user_id,
+      date: date
+    },
+    success: (data) => {
+      let res = JSON.parse(data)
+      console.log(res.data)
+      // alert(res.message)
+
+      let list = Array.from(document.querySelectorAll('.card.panel'))
+      let listToDelete = list.find(li => li.dataset.date === date)
+      listToDelete.remove()
+    },
+    error: (xhr, status, error) => {
+      console.log(xhr)
+      console.log(status)
+      console.log(error)
+    }
+  })
+}
+
+function deleteConfirm(event, date) {
+  event.stopPropagation()
+  deletePopup.showModal()
+  console.log(date)
+  dateToDelete = date
+
+  document.querySelector('#delete-popup__title').innerText = `Delete all plans on '${dateToDelete}'?`
+
 }
 
 </script>
