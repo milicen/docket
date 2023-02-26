@@ -70,6 +70,15 @@ function getGoal() {
         tag.value = goal.tag
         dueDate.value = goal.due_date
         
+        if(todos.length < 1) {
+          todoList.innerHTML = `
+            <div class="todo-blank">
+              <img src="assets/Blank State List.svg"></img>
+              <p>There's no plan for today.</p>
+            </div>
+          `
+        }
+
         todos.forEach(todo => {
           todoList.innerHTML += `
             <li class="todo todo-pick-calendar" data-todo="${todo.todo_id}">
@@ -162,6 +171,7 @@ function addTodo(event) {
       let res = JSON.parse(data)
       // alert(res.message)
       console.log(res.data)
+      todoList.innerHTML = ''
       if (res.success > 0) {
         todoList.innerHTML += `
           <li class="todo todo-pick-calendar" data-todo="${res.data[0].todo_id}">
@@ -252,6 +262,15 @@ function deleteTodo(changedTodo, todoId) {
       // alert(res.message)
 
       changedTodo.remove()
+
+      if (Array.from(document.querySelectorAll('.todo')) < 1) {
+        todoList.innerHTML = `
+            <div class="todo-blank">
+              <img src="assets/Blank State List.svg"></img>
+              <p>There's no plan for today.</p>
+            </div>
+          `
+      }
     },
     error: (xhr, status, error) => {
       console.log(xhr)

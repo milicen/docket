@@ -290,8 +290,15 @@ function getTodos() {
                 <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${todo.todo_id},'todo')">${todo.todo}</div>
               </li>
             `
-            
           })
+        }
+        else {
+          todoList.innerHTML = `
+            <div class="todo-blank">
+              <img src="assets/Blank State List.svg"></img>
+              <p>There's no plan for today.</p>
+            </div>
+          `
         }
       }
     },
@@ -321,6 +328,7 @@ function addTodo(event) {
       let res = JSON.parse(data)
       // alert(res.message)
       console.log(res.data)
+      todoList.innerHTML = ''
       if (res.success > 0) {
         todoList.innerHTML += `
           <li class="todo" data-todo="${res.data[0].todo_id}">
@@ -393,8 +401,17 @@ function deleteTodo(changedTodo, todoId) {
       let res = JSON.parse(data)
       console.log(res.data)
       // alert(res.message)
-
       changedTodo.remove()
+
+      if (Array.from(document.querySelectorAll('.todo')) < 1) {
+        todoList.innerHTML = `
+            <div class="todo-blank">
+              <img src="assets/Blank State List.svg"></img>
+              <p>There's no plan for today.</p>
+            </div>
+          `
+      }
+
     },
     error: (xhr, status, error) => {
       console.log(xhr)

@@ -29,6 +29,15 @@ function getAllTodos() {
         console.log(dates)
         console.log(todos)
 
+        if (todos.length < 1 || dates.length < 1) {
+          page.innerHTML = `
+            <div class="list-blank">
+              <img src="assets/blankstate-list.png"></img>
+            </div>
+          `
+          return
+        }
+
         dates.forEach(date => {
           console.log(date)
           let cardPanel = `

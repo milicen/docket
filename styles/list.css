@@ -3,7 +3,7 @@
 .page#list {
   gap: 1.5rem; 
   overflow-x: auto;
-  border: 1px solid black;
+  position: relative;
 }
 
 .panel {
@@ -33,6 +33,7 @@
 }
 
 .panel .panel-content {
+  position: relative;
   flex: 1;
   padding: 1rem;
   display: flex;
@@ -49,6 +50,35 @@ form.add-todo {
   display: flex;
   flex-direction: column;
   gap: .5rem;
+}
+
+.todo-blank {
+  position: absolute;
+  display: grid;
+  gap: 1rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  text-align: center;
+}
+
+.todo-blank p{
+  color: var(--clr-dark-grey);
+}
+
+.list-blank {
+  width: 100%;
+  position: absolute;
+  inset: 0;
+  display: grid;
+  gap: 1rem;
+  place-items: center;
+
+}
+
+.list-blank img {
+  width: 30rem;
+  margin-top: -10rem;
 }
 
 /* --- todo --- */
