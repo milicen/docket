@@ -3,6 +3,7 @@
 </section>
 
 <script>
+const user = JSON.parse(localStorage.getItem('user'))[0]
 const page = document.querySelector('#list')
 
 window.addEventListener('load', (e) => {
@@ -10,8 +11,6 @@ window.addEventListener('load', (e) => {
 })
 
 function getAllTodos() {
-  let user = JSON.parse(localStorage.getItem('user'))[0]
-
   $.ajax({
     type: 'GET',
     url: 'api/get_all_todos.php',
@@ -69,8 +68,8 @@ function getAllTodos() {
               // `
               todoList.innerHTML += `
                 <li class="todo" data-todo="${todo.todo_id}">
-                  <input type="checkbox" ${todo.is_finished ? 'checked' : ''} onchange="updateTodo(event,${todo.todo_id})">
-                  <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${todo.todo_id})">${todo.todo}</div>
+                  <input type="checkbox" ${todo.is_finished ? 'checked' : ''} onchange="updateTodo(event,${todo.todo_id},'todo_finished')">
+                  <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${todo.todo_id},'todo')">${todo.todo}</div>
                 </li>
               `
           })
@@ -91,7 +90,6 @@ function addTodo(event) {
   console.log(target)
   console.log('event: ', event)
   let date = event.target.dataset.date
-  let user = JSON.parse(localStorage.getItem('user'))[0]
   $.ajax({
     type: 'POST',
     url: 'api/add_todo.php',
@@ -108,8 +106,8 @@ function addTodo(event) {
         let todoList = document.querySelector(`#todo-list__${date}`)
         todoList.innerHTML += `
           <li class="todo" data-todo="${res.data[0].todo_id}">
-            <input type="checkbox" onchange="updateTodo(event,${res.data[0].todo_id})">
-            <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${res.data[0].todo_id})">${target.todo}</div>
+            <input type="checkbox" onchange="updateTodo(event,${res.data[0].todo_id},'todo_finished')">
+            <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${res.data[0].todo_id},'todo')">${target.todo}</div>
           </li>
         `
         event.target[0].value = null
@@ -123,30 +121,49 @@ function addTodo(event) {
   })
 }
 
-function updateTodo(event, todoId) {
+function updateTodo(event, todoId, part) {
   // console.log('update todo')
-  console.log(event.target.innerText)
-  let todosEl = Array.from(document.querySelectorAll('.todo'))
-  let changedTodo = todosEl.find(todo => parseInt(todo.dataset.todo) === todoId)
-  let isChecked = changedTodo.children[0].checked
-  // let todoVal = changedTodo.children[1].value
-  let todoVal = event.target.innerText
-  let user = JSON.parse(localStorage.getItem('user'))[0]
-  
-  if(todoVal == '') {
-    deleteTodo(changedTodo, user, todoId)
-    return
+  let todo, todo_finished
+  let updateData = {
+    user_id: user.user_id,
+    todo_id: todoId
   }
+
+  switch(part) {
+    case 'todo':
+      todo = event.target.innerText
+      updateData.todo = todo
+
+      if (todo == '') {
+        console.log('empty')
+        let todos = Array.from(document.querySelectorAll('.todo'))
+        let changedTodo = todos.find(todo => parseInt(todo.dataset.todo) === todoId)
+        deleteTodo(changedTodo, todoId)
+        return
+      }
+      break
+    case 'todo_finished':
+      todo_finished = event.target.checked
+      updateData.todo_finished = todo_finished ? 1 : 0
+      break
+  }
+
+  // console.log(event.target.innerText)
+  // let todosEl = Array.from(document.querySelectorAll('.todo'))
+  // let changedTodo = todosEl.find(todo => parseInt(todo.dataset.todo) === todoId)
+  // let isChecked = changedTodo.children[0].checked
+  // // let todoVal = changedTodo.children[1].value
+  // let todoVal = event.target.innerText
+  
+  // if(todoVal == '') {
+  //   deleteTodo(changedTodo, user, todoId)
+  //   return
+  // }
 
   $.ajax({
     type: 'POST',
     url: 'api/update_todo.php',
-    data: {
-      todo_id: todoId,
-      user_id: user.user_id,
-      todo: todoVal,
-      todo_finished: isChecked ? 1 : 0
-    },
+    data: updateData,
     success: (data) => {
       let res = JSON.parse(data)
       console.log(res.data)
@@ -159,7 +176,7 @@ function updateTodo(event, todoId) {
   })
 }
 
-function deleteTodo(changedTodo, user, todoId) {
+function deleteTodo(changedTodo, todoId) {
   $.ajax({
     type: 'POST',
     url: 'api/delete_todo.php',

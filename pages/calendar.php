@@ -253,6 +253,7 @@ function initMonthSelectors() {
 </script>
 
 <script>
+const user = JSON.parse(localStorage.getItem('user'))[0]
 const todoList = document.querySelector('#calendar_todo_list')
 const calendarTodoDate = document.querySelector('#calendar_todo_date')
 
@@ -266,7 +267,6 @@ window.addEventListener('load', e => {
 function getTodos() {
   let dayOfMonth = parseInt(selectedDay.children[0].innerText)
   let date = currentMonthDays.find(day => day.dayOfMonth === dayOfMonth).date
-  let user = JSON.parse(localStorage.getItem('user'))[0]
   $.ajax({
     type: 'GET',
     url: 'api/get_todos_by_date.php',
@@ -286,8 +286,8 @@ function getTodos() {
           todos.forEach(todo => {
             todoList.innerHTML += `
               <li class="todo" data-todo="${todo.todo_id}">
-                <input type="checkbox" ${todo.is_finished ? 'checked' : ''} onchange="updateTodo(event,${todo.todo_id})">
-                <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${todo.todo_id})">${todo.todo}</div>
+                <input type="checkbox" ${todo.is_finished ? 'checked' : ''} onchange="updateTodo(event,${todo.todo_id},'todo_finished')">
+                <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${todo.todo_id},'todo')">${todo.todo}</div>
               </li>
             `
             
@@ -309,7 +309,6 @@ function addTodo(event) {
   console.log(target)
   let dayOfMonth = parseInt(selectedDay.children[0].innerText)
   let date = currentMonthDays.find(day => day.dayOfMonth === dayOfMonth).date
-  let user = JSON.parse(localStorage.getItem('user'))[0]
   $.ajax({
     type: 'POST',
     url: 'api/add_todo.php',
@@ -325,8 +324,8 @@ function addTodo(event) {
       if (res.success > 0) {
         todoList.innerHTML += `
           <li class="todo" data-todo="${res.data[0].todo_id}">
-            <input type="checkbox" onchange="updateTodo(event,${res.data[0].todo_id})">
-            <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${res.data[0].todo_id})">${target.todo}</div>
+            <input type="checkbox" onchange="updateTodo(event,${res.data[0].todo_id},'todo_finished')">
+            <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${res.data[0].todo_id},'todo')">${target.todo}</div>
           </li>
         `
         document.querySelector('#add_todo').value = null
@@ -340,27 +339,36 @@ function addTodo(event) {
   })
 }
 
-function updateTodo(event, todoId) {
-  let todosEl = Array.from(document.querySelectorAll('.todo'))
-  let changedTodo = todosEl.find(todo => parseInt(todo.dataset.todo) === todoId)
-  let isChecked = changedTodo.children[0].checked
-  let todoVal = event.target.innerText
-  let user = JSON.parse(localStorage.getItem('user'))[0]
-  
-  if(todoVal == '') {
-    deleteTodo(changedTodo, user, todoId)
-    return
+function updateTodo(event, todoId, part) {
+  let todo, todo_finished
+  let updateData = {
+    user_id: user.user_id,
+    todo_id: todoId
+  }
+
+  switch(part) {
+    case 'todo':
+      todo = event.target.innerText
+      updateData.todo = todo
+
+      if (todo == '') {
+        console.log('empty')
+        let todos = Array.from(document.querySelectorAll('.todo'))
+        let changedTodo = todos.find(todo => parseInt(todo.dataset.todo) === todoId)
+        deleteTodo(changedTodo, todoId)
+        return
+      }
+      break
+    case 'todo_finished':
+      todo_finished = event.target.checked
+      updateData.todo_finished = todo_finished ? 1 : 0
+      break
   }
 
   $.ajax({
     type: 'POST',
     url: 'api/update_todo.php',
-    data: {
-      todo_id: todoId,
-      user_id: user.user_id,
-      todo: todoVal,
-      todo_finished: isChecked ? 1 : 0
-    },
+    data: updateData,
     success: (data) => {
       let res = JSON.parse(data)
       console.log(res.data)
@@ -373,7 +381,7 @@ function updateTodo(event, todoId) {
   })
 }
 
-function deleteTodo(changedTodo, user, todoId) {
+function deleteTodo(changedTodo, todoId) {
   $.ajax({
     type: 'POST',
     url: 'api/delete_todo.php',
