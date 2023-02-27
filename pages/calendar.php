@@ -284,12 +284,27 @@ function getTodos() {
         todoList.innerHTML = ''
         if (todos.length > 0) {
           todos.forEach(todo => {
-            todoList.innerHTML += `
-              <li class="todo" data-todo="${todo.todo_id}">
-                <input type="checkbox" ${todo.is_finished ? 'checked' : ''} onchange="updateTodo(event,${todo.todo_id},'todo_finished')">
-                <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${todo.todo_id},'todo')">${todo.todo}</div>
-              </li>
-            `
+            if (!todo.tag) {
+              todoList.innerHTML += `
+                <li class="todo" data-todo="${todo.todo_id}">
+                  <input type="checkbox" ${todo.is_finished ? 'checked' : ''} onchange="updateTodo(event,${todo.todo_id},'todo_finished')">
+                  <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${todo.todo_id},'todo')">${todo.todo}</div>
+                </li>
+              `
+            }
+            else {
+              todoList.innerHTML += `
+                  <li class="todo todo-tag" data-todo="${todo.todo_id}">
+                    <div>
+                      <input type="checkbox" ${todo.is_finished ? 'checked' : ''} onchange="updateTodo(event,${todo.todo_id},'todo_finished')">
+                      <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${todo.todo_id},'todo')">${todo.todo}</div>
+                    </div>
+                    <div class="tags">
+                      <span class="tag">${todo.tag}</span>
+                    </div>
+                  </li>
+                `
+            }
           })
         }
         else {

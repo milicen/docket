@@ -98,12 +98,28 @@ function getAllTodos() {
               //     <input type="text" placeholder="To-do" value="${todo.todo}" oninput="updateTodo(event,${todo.todo_id})">
               //   </li>
               // `
-              todoList.innerHTML += `
-                <li class="todo" data-todo="${todo.todo_id}">
-                  <input type="checkbox" ${todo.is_finished ? 'checked' : ''} onchange="updateTodo(event,${todo.todo_id},'todo_finished')">
-                  <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${todo.todo_id},'todo')">${todo.todo}</div>
-                </li>
-              `
+
+              if (!todo.tag) {
+                todoList.innerHTML += `
+                  <li class="todo" data-todo="${todo.todo_id}">
+                    <input type="checkbox" ${todo.is_finished ? 'checked' : ''} onchange="updateTodo(event,${todo.todo_id},'todo_finished')">
+                    <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${todo.todo_id},'todo')">${todo.todo}</div>
+                  </li>
+                `
+              }
+              else {
+                todoList.innerHTML += `
+                  <li class="todo todo-tag" data-todo="${todo.todo_id}">
+                    <div>
+                      <input type="checkbox" ${todo.is_finished ? 'checked' : ''} onchange="updateTodo(event,${todo.todo_id},'todo_finished')">
+                      <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${todo.todo_id},'todo')">${todo.todo}</div>
+                    </div>
+                    <div class="tags">
+                      <span class="tag">${todo.tag}</span>
+                    </div>
+                  </li>
+                `
+              }
           })
         })
       }

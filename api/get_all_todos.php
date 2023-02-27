@@ -12,7 +12,7 @@ $dates = $db->m();
 $db->rc();
 
 $db = new db();
-$db->q('SELECT * FROM todos WHERE user = :user_id ORDER BY date ASC');
+$db->q('SELECT todos.*, goals.tag FROM todos LEFT JOIN goals ON goals.goal_id = todos.goal WHERE todos.user = :user_id ORDER BY date ASC');
 $db->b(':user_id', $user_id);
 $todos = $db->m();
 $db->rc();
