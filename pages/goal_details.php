@@ -171,7 +171,7 @@ function addTodo(event) {
       let res = JSON.parse(data)
       // alert(res.message)
       console.log(res.data)
-      todoList.innerHTML = ''
+      // todoList.innerHTML = ''
       if (res.success > 0) {
         todoList.innerHTML += `
           <li class="todo todo-pick-calendar" data-todo="${res.data[0].todo_id}">

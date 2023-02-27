@@ -47,17 +47,25 @@ function getGoals() {
       // alert(res.message)
       console.log(res.data)
       if (res.success > 0) {
-        let goals = res.data
+        let goals = res.data.goals
+        let todoCount = res.data.todo_count
         if (goals.length > 0) {
           // <div class="card goal" onclick="location.href = location.origin + location.pathname + '?page=goal-details&g=${goal.goal_id}'">
           goals.forEach(goal => {
+            let todoData = todoCount.find(todo => todo.goal_id === goal.goal_id)
+            let totalFinished = 0
+            let totalTodo = 0
+            if (todoData) {
+              totalFinished = todoData.total_finished
+              totalTodo = todoData.total_todo
+            }
             grid.innerHTML += `
               <div class="card goal" onclick="location.href = location.origin + location.pathname + '?page=goal-details&g=${goal.goal_id}'" data-goal="${goal.goal_id}">
                 <section>
                   <div class="goal-misc">
                     <span class="tag">${goal.tag}</span>
                     <div class="gap"></div>
-                    <span class="counter">0/12</span>
+                    <span class="counter">${totalFinished}/${totalTodo}</span>
                     <svg onclick="deleteConfirm(event,${goal.goal_id}, '${goal.goal_title}')" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 16H5V5h14v14M17 8.4L13.4 12l3.6 3.6l-1.4 1.4l-3.6-3.6L8.4 17L7 15.6l3.6-3.6L7 8.4L8.4 7l3.6 3.6L15.6 7L17 8.4Z"/></svg>
                   </div>
                   
