@@ -1,25 +1,19 @@
 <?php
-date_default_timezone_set("Asia/Jakarta");
 include('../class/class.global.php');
 include('../class/handshake.php');
+include('../class/singleton.php');
 
 $date = $_POST['date'];
 $user_id = $_POST['user_id'];
 
-$db = new db();
-$db->q('DELETE FROM todos WHERE date = :date AND user = :user_id');
-$db->b(':date', $date);
-$db->b(':user_id', $user_id);
-$res = $db->x();
+$res = Todos::delete_all_todos_by_date($date, $user_id);
 
 if ($res > 0) {
   echo json_encode([
     "success" => 1,
-    "message" => "Deleted todo",
+    "message" => "Deleted todos by date",
     "data" => $res
   ]);
 }
-
-$db->rc();
 
 ?>

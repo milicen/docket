@@ -1,24 +1,13 @@
 <?php
-date_default_timezone_set("Asia/Jakarta");
 include('../class/class.global.php');
 include('../class/handshake.php');
+include('../class/singleton.php');
 
 $goal_id = $_POST['goal'];
 $user_id = $_POST['user_id'];
 
-$db = new db();
-$db->q('DELETE FROM todos WHERE goal = :goal_id AND user = :user_id');
-$db->b(':goal_id', $goal_id);
-$db->b(':user_id', $user_id);
-$delete_todo_res = $db->x();
-$db->rc();
-
-$db = new db();
-$db->q('DELETE FROM goals WHERE goal_id = :goal_id AND user = :user_id');
-$db->b(':goal_id', $goal_id);
-$db->b(':user_id', $user_id);
-$delete_goal_res = $db->x();
-$db->rc();
+$delete_todo_res = Goals::delete_all_todos_in_goal($goal_id, $user_id);
+$delete_goal_res = Goals::delete_goal_by_id($goal_id, $user_id);
 
 echo json_encode([
   "success" => 1,

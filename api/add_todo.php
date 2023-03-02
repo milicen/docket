@@ -1,7 +1,7 @@
 <?php
-date_default_timezone_set("Asia/Jakarta");
 include('../class/class.global.php');
 include('../class/handshake.php');
+include('../class/singleton.php');
 
 $todo = $_POST['todo'];
 $date = $_POST['date'];
@@ -13,24 +13,16 @@ else {
   $goal_id = null;
 }
 
-$db = new db();
-$db->q('INSERT INTO todos (todo, date, user, goal) VALUES (:todo, :date, :user_id, :goal_id)');
-$db->b(':todo', $todo);
-$db->b(':date', $date);
-$db->b(':user_id', $user_id);
-$db->b(':goal_id', $goal_id);
-$res = $db->x();
+$res = Todos::add_todo($todo, $date, $user_id, $goal_id);
 
-if ($res > 0) {
+if ($res["res"] > 0) {
   echo json_encode([
     "success" => 1,
     "message" => "Added new todo",
     "data" => array([
-      "todo_id" => $db->lid()
+      "todo_id" => $res["todo_id"]
     ])
   ]);
 }
-
-$db->rc();
 
 ?>

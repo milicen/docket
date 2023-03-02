@@ -1,8 +1,7 @@
 <?php
-date_default_timezone_set("Asia/Jakarta");
-include('../class/class.global.php');
 include('../class/handshake.php');
-
+include('../class/class.global.php');
+include('../class/singleton.php');
 
 $username = $_POST['username'];
 $password = $_POST['password'];
@@ -15,12 +14,7 @@ if ($username == null || $password == null) {
   exit();
 }
 
-$db = new db();
-$db->q('SELECT * FROM users WHERE user_name = :username');
-$db->b(':username', $username);
-
-$get_user = $db->s();
-$db->rc();
+$get_user = Login::user_login($username, $password);
 
 if ($get_user == null) {
   echo json_encode([

@@ -1,17 +1,12 @@
 <?php
-date_default_timezone_set("Asia/Jakarta");
 include('../class/class.global.php');
 include('../class/handshake.php');
+include('../class/singleton.php');
 
 $date = $_GET['date'];
 $user_id = $_GET['user_id'];
 
-$db = new db();
-$db->q('SELECT todos.*, goals.tag FROM todos LEFT JOIN goals ON goals.goal_id = todos.goal WHERE todos.user = :user_id AND date = :date');
-$db->b(':user_id', $user_id);
-$db->b(':date', $date);
-$res = $db->m();
-$db->rc();
+$res = Todos::get_todos_by_date($date, $user_id);
 
 echo json_encode([
   "success" => 1,

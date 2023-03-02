@@ -5,7 +5,7 @@
 <dialog id="delete-popup">
   <form method="dialog">
     <h1 id="delete-popup__title">Delete Confirmation</h1>
-    <p>Are you sure you'd like to delete this goal and all todos associated with it?</p>
+    <p>Are you sure you'd like to delete all plans for this date?</p>
     <div class="buttons">
       <button value="cancel">Cancel</button>
       <button class="danger" value="accept">Yes, I want to delete</button>

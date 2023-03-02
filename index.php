@@ -29,7 +29,7 @@
     }
   </script>
 
-  <title>Dokcet</title>
+  <title>Docket</title>
 </head>
 
 <?php
@@ -119,7 +119,7 @@ else {
 if (!localStorage.getItem('user')) {
   document.querySelector('.top-bar__links .username').innerText = 'Not logged in'
   
-  if (!location.search.includes('login')) {
+  if (location.search.includes('calendar') || location.search.includes('list') || location.search.includes('goals') || location.search.includes('goal-details')) {
     location.replace(location.href = location.origin + location.pathname + '?page=login')
   }
 }

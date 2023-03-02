@@ -1,16 +1,12 @@
 <?php
-date_default_timezone_set("Asia/Jakarta");
 include('../class/class.global.php');
 include('../class/handshake.php');
+include('../class/singleton.php');
 
 $todo_id = $_POST['todo_id'];
 $user_id = $_POST['user_id'];
 
-$db = new db();
-$db->q('DELETE FROM todos WHERE todo_id = :todo_id AND user = :user_id');
-$db->b(':todo_id', $todo_id);
-$db->b(':user_id', $user_id);
-$res = $db->x();
+$res = Todos::delete_todo($todo_id, $user_id);
 
 if ($res > 0) {
   echo json_encode([
@@ -19,7 +15,5 @@ if ($res > 0) {
     "data" => $res
   ]);
 }
-
-$db->rc();
 
 ?>

@@ -1,25 +1,19 @@
 <?php
-date_default_timezone_set("Asia/Jakarta");
 include('../class/class.global.php');
 include('../class/handshake.php');
+include('../class/singleton.php');
 
 $user_id = $_POST['user_id'];
 
-$db = new db();
-$db->q('INSERT INTO goals SET user = :user_id');
-$db->b(':user_id', $user_id);
-$res = $db->x();
+$res = Goals::add_goal($user_id);
 
-if ($res > 0) {
+if ($res["res"] > 0) {
   echo json_encode([
     "success" => 1,
     "message" => "Added new todo",
     "data" => array(
-      "goal_id" => $db->lid()
+      "goal_id" => $res["goal_id"]
     )
   ]);
 }
-
-$db->rc();
-
 ?>
