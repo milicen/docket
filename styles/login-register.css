@@ -1,7 +1,7 @@
 @import url(variables.css);
 
 .page#login, .page#register {
-  /* display: grid; */
+  display: grid;
   place-items: center;
 }
 

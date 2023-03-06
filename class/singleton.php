@@ -2,7 +2,7 @@
 
 class Login {
 
-  static public function user_login($username, $password) {
+  static public function get_user_with_username($username, $password) {
 		try {
 			$db = new db();
 			$db->q("SELECT * FROM users WHERE user_name = '".$username."' ");

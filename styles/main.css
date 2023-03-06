@@ -33,7 +33,7 @@ main {
 .page {
   padding: 2rem;
   width: 100vw;
-  display: none;
+  /* display: none; */
 }
 
 .card {
@@ -66,10 +66,18 @@ input, textarea {
   transform: translateY(-50%);
   margin-left: 1em;
   color: var(--clr-dark-grey);
+  transition: all 0.3s ease-in;
 }
 
 .input-labeled input {
   padding: 1em;
+}
+
+label.label-small {
+  font-size: .8rem;
+  top: -1.5em;
+  transform: translateY(0);
+  margin-left: 0;
 }
 
 .btn {

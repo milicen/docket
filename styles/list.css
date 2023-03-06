@@ -1,6 +1,7 @@
 @import url(variables.css);
 
 .page#list {
+  display: flex;
   gap: 1.5rem; 
   overflow-x: auto;
   position: relative;

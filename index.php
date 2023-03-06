@@ -45,27 +45,6 @@ else {
 }
 ?>
 
-<style>
-  <?php
-  if ($page == "register" || $page == "login") {
-    echo '.page#'.$page.' {
-      display: grid;
-    }';
-  }
-  else if ($page == "list" || $page == "goal-details" || $page == "calendar") {
-    echo '.page#' . $page . ' {
-      display: flex;
-    }';
-  }
-  else {
-    echo '.page#'.$page.' {
-      display: block;
-    }';
-  }
-  ?>
-</style>
-
-
 <body>
   <div class="top-bar">
     <img src="assets/docket.svg" alt="docket">
@@ -132,6 +111,22 @@ function logout() {
   localStorage.removeItem('user')
   location.href = location.origin + location.pathname + '?page=login'
 }
+
+const labeledInputs = document.querySelectorAll('.input-labeled')
+labeledInputs.forEach(inputGroup => {
+  let label = inputGroup.querySelector('label')
+  let input = inputGroup.querySelector('input')
+  input.addEventListener('focus', (e) => {
+    label.classList.add('label-small')
+  })
+  input.addEventListener('blur', (e) => {
+    if (!input.value) {
+      label.classList.remove('label-small')
+    }
+  })
+
+
+});
 
 </script>
 

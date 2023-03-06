@@ -60,8 +60,6 @@ class db {
     return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
 
-	//
-
 	public function cq(){
 		$this->x();
     return $this->stmt->rowCount();

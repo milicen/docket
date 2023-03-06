@@ -1,6 +1,7 @@
 @import url(variables.css);
 
 .page#goal-details {
+  display: flex;
   margin-inline: 10rem;
 }
 

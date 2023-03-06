@@ -14,7 +14,7 @@ if ($username == null || $password == null) {
   exit();
 }
 
-$get_user = Login::user_login($username, $password);
+$get_user = Login::get_user_with_username($username, $password);
 
 if ($get_user == null) {
   echo json_encode([
