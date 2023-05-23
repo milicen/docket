@@ -19,7 +19,12 @@
   </form>
 </section>
 
+<div id="snackbar" class="snackbar">Some text some message..</div>
+
+
 <script>
+const snackbar = document.querySelector('#snackbar')
+
 function login(event) {
   event.preventDefault()
   let data = getData(event.target)
@@ -30,7 +35,10 @@ function login(event) {
     data: data,
     success: (data) => {
       let res = JSON.parse(data)
-      alert(res.message)
+      // alert(res.message)
+      snackbar.innerText = res.message
+      snackbar.classList.add('show')
+      setTimeout(function(){ snackbar.classList.remove('show') }, 3000);
       if (res.success > 0) {
         localStorage.setItem('user', JSON.stringify(res.user))
         location.href = location.origin + location.pathname + '?page=calendar'

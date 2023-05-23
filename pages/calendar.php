@@ -26,26 +26,13 @@
 
     <div class="panel-content">
       <ul id="calendar_todo_list" class="todo-list">
-        <li class="todo">
-          <input type="checkbox">
-          <input type="text" placeholder="To-do">
-        </li>
-        <li class="todo todo-tag">
-          <div>
-            <input type="checkbox">
-            <input type="text" placeholder="To-do">
-          </div>
-          <div class="tags">
-            <span class="tag">chores</span>
-          </div>
-        </li>
       </ul>
 
-      <form class="add-todo" onsubmit="addTodo(event)">
-        <input id="add_todo" type="text" name="todo" placeholder="Type your to-do">
-        <input class="btn" type="submit" value="Add todo">
-      </form>
     </div>
+    <form class="add-todo" onsubmit="addTodo(event)">
+      <input id="add_todo" type="text" name="todo" placeholder="Type your to-do">
+      <input class="btn" type="submit" value="Add todo">
+    </form>
   </section>
 </section>
 
@@ -124,8 +111,10 @@ function appendDay(day, calendarDaysElement) {
       // overwrite selected day value
     selectedDay = dayElement
 
-    let todayDayOfMonth = TODAY.split('-')[2]
-    let selectedDayOfMonth = selectedDay.children[0].innerText
+    let todayDayOfMonth = parseInt(TODAY.split('-')[2])
+    let selectedDayOfMonth = parseInt(selectedDay.children[0].innerText)
+
+    console.log(todayDayOfMonth, selectedDayOfMonth)
 
     if (selectedDayOfMonth !== todayDayOfMonth) {
       // add class to selected day
@@ -264,6 +253,12 @@ window.addEventListener('load', e => {
 })
 
 
+function getChangedTodo(todoId) {
+  let todos = Array.from(document.querySelectorAll('.todo'))
+  let changedTodo = todos.find(todo => parseInt(todo.dataset.todo) === todoId)
+  return changedTodo
+}
+
 function getTodos() {
   let dayOfMonth = parseInt(selectedDay.children[0].innerText)
   let date = currentMonthDays.find(day => day.dayOfMonth === dayOfMonth).date
@@ -289,6 +284,9 @@ function getTodos() {
                 <li class="todo" data-todo="${todo.todo_id}">
                   <input type="checkbox" ${todo.is_finished ? 'checked' : ''} onchange="updateTodo(event,${todo.todo_id},'todo_finished')">
                   <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${todo.todo_id},'todo')">${todo.todo}</div>
+                  <button class="icon" onclick="deleteTodo(getChangedTodo(${todo.todo_id}),${todo.todo_id})">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#888888" d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12M8 9h8v10H8V9m7.5-5l-1-1h-5l-1 1H5v2h14V4h-3.5Z"/></svg>
+                  </button>
                 </li>
               `
             }
@@ -298,6 +296,9 @@ function getTodos() {
                     <div>
                       <input type="checkbox" ${todo.is_finished ? 'checked' : ''} onchange="updateTodo(event,${todo.todo_id},'todo_finished')">
                       <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${todo.todo_id},'todo')">${todo.todo}</div>
+                      <button class="icon" onclick="deleteTodo(getChangedTodo(${todo.todo_id}),${todo.todo_id})">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#888888" d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12M8 9h8v10H8V9m7.5-5l-1-1h-5l-1 1H5v2h14V4h-3.5Z"/></svg>
+                      </button>
                     </div>
                     <div class="tags">
                       <span class="tag">${todo.tag}</span>
@@ -345,10 +346,17 @@ function addTodo(event) {
       console.log(res.data)
       // todoList.innerHTML = ''
       if (res.success > 0) {
+        if(document.querySelector('.todo-blank')) {
+          document.querySelector('.todo-blank').remove()
+        }
+
         todoList.innerHTML += `
           <li class="todo" data-todo="${res.data[0].todo_id}">
             <input type="checkbox" onchange="updateTodo(event,${res.data[0].todo_id},'todo_finished')">
             <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${res.data[0].todo_id},'todo')">${target.todo}</div>
+            <button class="icon" onclick="deleteTodo(getChangedTodo(${res.data[0].todo_id}),${res.data[0].todo_id})">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#888888" d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12M8 9h8v10H8V9m7.5-5l-1-1h-5l-1 1H5v2h14V4h-3.5Z"/></svg>
+            </button>
           </li>
         `
         document.querySelector('#add_todo').value = null
@@ -376,9 +384,7 @@ function updateTodo(event, todoId, part) {
 
       if (todo == '') {
         console.log('empty')
-        let todos = Array.from(document.querySelectorAll('.todo'))
-        let changedTodo = todos.find(todo => parseInt(todo.dataset.todo) === todoId)
-        deleteTodo(changedTodo, todoId)
+        deleteTodo(getChangedTodo(todoId), todoId)
         return
       }
       break

@@ -4,7 +4,7 @@
       <a onclick="location.href = location.origin + location.pathname + '?page=goals'">
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M18.41 7.41L17 6l-6 6l6 6l1.41-1.41L13.83 12l4.58-4.59m-6 0L11 6l-6 6l6 6l1.41-1.41L7.83 12l4.58-4.59Z"/></svg>
       </a>
-      <h1 contenteditable id="goal-title" onkeyup="updateGoal(event, 'title')">Get better at swimming</h1>
+      <h1 contenteditable id="goal-title" onkeyup="updateGoal(event, 'title')"></h1>
     </div>
     <div class="input-group">
       <label for="tag">Tag:</label>
@@ -23,7 +23,6 @@
   <div class="todos">
     <h2>Planning</h2>
     <div class="todo-container">
-      <h3>January 2023</h3>
     </div>
     <form class="add-todo" onsubmit="addTodo(event)">
       <input type="text" name="todo" id="add_todo" placeholder="Type your to-do">
@@ -49,6 +48,12 @@ let user = JSON.parse(localStorage.getItem('user'))[0]
 window.addEventListener('load', (e) => {
   getGoal()
 })
+
+function getChangedTodo(todoId) {
+  let todos = Array.from(document.querySelectorAll('.todo'))
+  let changedTodo = todos.find(todo => parseInt(todo.dataset.todo) === todoId)
+  return changedTodo
+}
 
 function getGoal() {
   $.ajax({
@@ -86,6 +91,9 @@ function getGoal() {
                 <input type="checkbox" onchange="updateTodo(event,${todo.todo_id},'todo_finished')" ${todo.is_finished ? 'checked' : ''}>
                 <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${todo.todo_id},'todo')">${todo.todo}</div>
                 <input type="date" onchange="updateTodo(event,${todo.todo_id},'date')" value="${todo.date}">
+                <button class="icon" onclick="deleteTodo(getChangedTodo(${todo.todo_id}),${todo.todo_id})">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#888888" d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12M8 9h8v10H8V9m7.5-5l-1-1h-5l-1 1H5v2h14V4h-3.5Z"/></svg>
+                </button>
               </div>
               <span class="date" data-todo="${todo.todo_id}">${todo.date}</span>
             </li>
@@ -173,12 +181,19 @@ function addTodo(event) {
       console.log(res.data)
       // todoList.innerHTML = ''
       if (res.success > 0) {
+        if(document.querySelector('.todo-blank')) {
+          document.querySelector('.todo-blank').remove()
+        }
+
         todoList.innerHTML += `
           <li class="todo todo-pick-calendar" data-todo="${res.data[0].todo_id}">
               <div>
                 <input type="checkbox" onchange="updateTodo(event,${res.data[0].todo_id},'todo_finished')">
                 <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${res.data[0].todo_id},'todo')">${target.todo}</div>
                 <input type="date" onchange="updateTodo(event,${res.data[0].todo_id},'date')">
+                <button class="icon" onclick="deleteTodo(getChangedTodo(${res.data[0].todo_id}),${res.data[0].todo_id})">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#888888" d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12M8 9h8v10H8V9m7.5-5l-1-1h-5l-1 1H5v2h14V4h-3.5Z"/></svg>
+                </button>
               </div>
               <span class="date" data-todo="${res.data[0].todo_id}">${date}</span>
             </li>
@@ -209,9 +224,7 @@ function updateTodo(event, todoId, part) {
 
       if (todo == '') {
         console.log('empty')
-        let todos = Array.from(document.querySelectorAll('.todo'))
-        let changedTodo = todos.find(todo => parseInt(todo.dataset.todo) === todoId)
-        deleteTodo(changedTodo, todoId)
+        deleteTodo(getChangedTodo(todoId), todoId)
         return
       }
 

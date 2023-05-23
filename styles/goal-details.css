@@ -71,6 +71,8 @@
   height: 100%;
   overflow-y: hidden;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .page#goal-details .todos h2 {
@@ -87,16 +89,11 @@
 .page#goal-details .todo-container {
   margin-inline: -1rem;
   padding-inline: 1rem;
-  max-height: 41.5rem;
+  flex: 1 0 0;
   overflow-y: auto;
 }
 
 .page#goal-details form.add-todo {
   background-color: var(--clr-background);
-  position: absolute;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  margin-inline: 1rem;
   padding-block: 1rem;
 }

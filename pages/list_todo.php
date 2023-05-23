@@ -31,6 +31,12 @@ window.addEventListener('load', (e) => {
   getAllTodos()
 })
 
+function getChangedTodo(todoId) {
+  let todos = Array.from(document.querySelectorAll('.todo'))
+  let changedTodo = todos.find(todo => parseInt(todo.dataset.todo) === todoId)
+  return changedTodo
+}
+
 function getAllTodos() {
   $.ajax({
     type: 'GET',
@@ -40,7 +46,6 @@ function getAllTodos() {
     },
     success: (data) => {
       let res = JSON.parse(data)
-      // alert(res.message)
       console.log(res.data)
       if (res.success > 0) {
         let todoData = res.data
@@ -72,13 +77,11 @@ function getAllTodos() {
             <div class="panel-content">
               <ul class="todo-list" id="todo-list__${date.date}">
               </ul>
-
-
-              <form class="add-todo" onsubmit="addTodo(event)" data-date="${date.date}">
-                <input type="text" name="todo" id="#add-todo" placeholder="Type your to-do">
-                <input class="btn" type="submit" value="Add todo">
-              </form>
             </div>
+            <form class="add-todo" onsubmit="addTodo(event)" data-date="${date.date}">
+              <input type="text" name="todo" id="#add-todo" placeholder="Type your to-do">
+              <input class="btn" type="submit" value="Add todo">
+            </form>
           </section>
           `
           page.innerHTML += cardPanel
@@ -92,18 +95,14 @@ function getAllTodos() {
           let todoList = document.querySelector(`#todo-list__${panel.dataset.date}`)
 
           dateTodos.forEach(todo => {
-              // todoList.innerHTML += `
-              //   <li class="todo" data-todo="${todo.todo_id}">
-              //     <input type="checkbox" ${todo.is_finished ? 'checked' : ''} onchange="updateTodo(event,${todo.todo_id})">
-              //     <input type="text" placeholder="To-do" value="${todo.todo}" oninput="updateTodo(event,${todo.todo_id})">
-              //   </li>
-              // `
-
               if (!todo.tag) {
                 todoList.innerHTML += `
                   <li class="todo" data-todo="${todo.todo_id}">
                     <input type="checkbox" ${todo.is_finished ? 'checked' : ''} onchange="updateTodo(event,${todo.todo_id},'todo_finished')">
                     <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${todo.todo_id},'todo')">${todo.todo}</div>
+                    <button class="icon" onclick="deleteTodo(getChangedTodo(${todo.todo_id}),${todo.todo_id})">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#888888" d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12M8 9h8v10H8V9m7.5-5l-1-1h-5l-1 1H5v2h14V4h-3.5Z"/></svg>
+                      </button>
                   </li>
                 `
               }
@@ -113,6 +112,9 @@ function getAllTodos() {
                     <div>
                       <input type="checkbox" ${todo.is_finished ? 'checked' : ''} onchange="updateTodo(event,${todo.todo_id},'todo_finished')">
                       <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${todo.todo_id},'todo')">${todo.todo}</div>
+                      <button class="icon" onclick="deleteTodo(getChangedTodo(${todo.todo_id}),${todo.todo_id})">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#888888" d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12M8 9h8v10H8V9m7.5-5l-1-1h-5l-1 1H5v2h14V4h-3.5Z"/></svg>
+                      </button>
                     </div>
                     <div class="tags">
                       <span class="tag">${todo.tag}</span>
@@ -148,7 +150,6 @@ function addTodo(event) {
     },
     success: (data) => {
       let res = JSON.parse(data)
-      // alert(res.message)
       console.log(res.data)
       if (res.success > 0) {
         let todoList = document.querySelector(`#todo-list__${date}`)
@@ -156,6 +157,9 @@ function addTodo(event) {
           <li class="todo" data-todo="${res.data[0].todo_id}">
             <input type="checkbox" onchange="updateTodo(event,${res.data[0].todo_id},'todo_finished')">
             <div class="todo-input" contenteditable placeholder="To-do" onkeyup="updateTodo(event,${res.data[0].todo_id},'todo')">${target.todo}</div>
+            <button class="icon" onclick="deleteTodo(getChangedTodo(${res.data[0].todo_id}),${res.data[0].todo_id})">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#888888" d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12M8 9h8v10H8V9m7.5-5l-1-1h-5l-1 1H5v2h14V4h-3.5Z"/></svg>
+            </button>
           </li>
         `
         event.target[0].value = null
@@ -170,7 +174,6 @@ function addTodo(event) {
 }
 
 function updateTodo(event, todoId, part) {
-  // console.log('update todo')
   let todo, todo_finished
   let updateData = {
     user_id: user.user_id,
@@ -184,9 +187,7 @@ function updateTodo(event, todoId, part) {
 
       if (todo == '') {
         console.log('empty')
-        let todos = Array.from(document.querySelectorAll('.todo'))
-        let changedTodo = todos.find(todo => parseInt(todo.dataset.todo) === todoId)
-        deleteTodo(changedTodo, todoId)
+        deleteTodo(getChangedTodo(todoId), todoId)
         return
       }
       break
@@ -195,18 +196,6 @@ function updateTodo(event, todoId, part) {
       updateData.todo_finished = todo_finished ? 1 : 0
       break
   }
-
-  // console.log(event.target.innerText)
-  // let todosEl = Array.from(document.querySelectorAll('.todo'))
-  // let changedTodo = todosEl.find(todo => parseInt(todo.dataset.todo) === todoId)
-  // let isChecked = changedTodo.children[0].checked
-  // // let todoVal = changedTodo.children[1].value
-  // let todoVal = event.target.innerText
-  
-  // if(todoVal == '') {
-  //   deleteTodo(changedTodo, user, todoId)
-  //   return
-  // }
 
   $.ajax({
     type: 'POST',
@@ -248,8 +237,6 @@ function deleteTodo(changedTodo, todoId) {
 }
 
 function deleteAllTodosOn(date) {
-  // console.log(date)
-  // return;
   $.ajax({
     type: 'POST',
     url: 'api/delete_todos_by_date.php',
@@ -260,7 +247,6 @@ function deleteAllTodosOn(date) {
     success: (data) => {
       let res = JSON.parse(data)
       console.log(res.data)
-      // alert(res.message)
 
       let list = Array.from(document.querySelectorAll('.card.panel'))
       let listToDelete = list.find(li => li.dataset.date === date)

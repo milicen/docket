@@ -44,13 +44,11 @@ function getGoals() {
     },
     success: (data) => {
       let res = JSON.parse(data)
-      // alert(res.message)
       console.log(res.data)
       if (res.success > 0) {
         let goals = res.data.goals
         let todoCount = res.data.todo_count
         if (goals.length > 0) {
-          // <div class="card goal" onclick="location.href = location.origin + location.pathname + '?page=goal-details&g=${goal.goal_id}'">
           goals.forEach(goal => {
             let todoData = todoCount.find(todo => todo.goal_id === goal.goal_id)
             let totalFinished = 0
@@ -99,7 +97,6 @@ function addGoal() {
     },
     success: (data) => {
       let res = JSON.parse(data)
-      // alert(res.message)
       console.log(res.data)
       if (res.success > 0) {
         location.href = location.origin + location.pathname + `?page=goal-details&g=${res.data.goal_id}`
@@ -129,10 +126,6 @@ function deleteGoal(goalId) {
       let goals = Array.from(document.querySelectorAll('.card.goal'))
       let goalEl = goals.find(goal => parseInt(goal.dataset.goal) === goalId)
       goalEl.remove()
-
-      // if (res.success > 0) {
-      //   location.href = location.origin + location.pathname + `?page=goal-details&g=${res.data.goal_id}`
-      // }
     },
     error: (xhr, status, error) => {
       console.log(xhr)
